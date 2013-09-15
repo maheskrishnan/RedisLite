@@ -1,0 +1,13 @@
+key
+    kid, key, type, value
+
+hash
+	hid, kid, field, value
+
+list
+	lid, kid, order, value
+	
+set
+    sid, kid, value
+
+	

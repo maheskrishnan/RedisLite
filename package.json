@@ -1,0 +1,11 @@
+{
+  "name": "redislite",
+  "description": "Simple RedisLite Key-Value Store + ExpressJS Middleware + Handy jQuery based javascript api to access the Key-Value store from browser.",
+  "version": "0.0.1",
+  "author": "Maheswaran Krishnan",
+  "homepage": "",
+  "dependencies": {
+    "base32": "0.0.5",
+    "express": "~3.4.0"
+  }
+}
