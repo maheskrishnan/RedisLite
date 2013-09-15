@@ -23,8 +23,8 @@ app.configure(function() {
     });
     app.use(express.static('public'));
 
-    var redisLiteFS  =   require('./redislite-fs.js')({rootDataDir:'db'});
-    var redisLiteMiddleware  =   require('./redislite-middleware.js');
+    var redisLiteFS  =   require('./../redislite-fs.js')({rootDataDir:'db'});
+    var redisLiteMiddleware  =   require('./../redislite-middleware.js');
     app.use('/api', redisLiteMiddleware({provider: redisLiteFS}).middleware);
 
 

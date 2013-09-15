@@ -10,4 +10,11 @@ list
 set
     sid, kid, value
 
-	
+
+table
+    id
+    userid
+    userdbname
+    key
+    fieldIfAny
+    value

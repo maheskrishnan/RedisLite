@@ -19,6 +19,13 @@ module.exports = function(options){
 
     router.get('/test', function(req, res){ res.send(200, "test successful..."); });
 
+    //TODO: caching & async for '/redis/util.js'
+    router.get('/redis/util.js', function(req, res){
+        var jsPath = require('path').resolve(__dirname, 'redislitejs.js');
+        var jsContent = require('fs').readFileSync(jsPath);
+        res.end(jsContent);
+    });
+
     router.post('/redis/register', function(req, res){
         var uname = req.body.uname;
         var pwd = req.body.pwd;
