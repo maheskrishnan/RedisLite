@@ -1,5 +1,4 @@
 
-
 /*
     1. simple key value datastore
     2. this datastore can contain multiple databases
@@ -16,6 +15,7 @@ module.exports = function (options){
 
     if (!options.rootDataDir) throw "rootDataDir: is not specified";
     if (!fs.existsSync(path.resolve(options.rootDataDir))) fs.mkdirSync(options.rootDataDir);
+
 
     var UserDB = function (dbName){
         var base32EncodedDBName = base32.encode(dbName);
@@ -70,44 +70,25 @@ module.exports = function (options){
         this.set(key, obj);
     };
 
-    /*
 
-    Advanced Redis functions for second phase.
+    var Provider = function(){};
 
-    UserDB.prototype.addFirst = function(key, value){};
-    UserDB.prototype.addAt = function(key, index, value){};
-    UserDB.prototype.addLast = function(key, value){};
-    UserDB.prototype.getFirst = function(key){};
-    UserDB.prototype.getAt = function(key, index){};
-    UserDB.prototype.getLast = function(key){};
-    UserDB.prototype.removeFirst = function(key){};
-    UserDB.prototype.removeAt = function(key, index){};
-    UserDB.prototype.removeLast = function(key){};
+    Provider.prototype.getOrCreateUserDB = function(dbName){ return new UserDB(dbName); };
 
-    UserDB.prototype.sadd = function(key, value){};
-    UserDB.prototype.sremove = function(key, value){};
-    UserDB.prototype.sexists = function(key, value){};
-    UserDB.prototype.sall = function(key){};
-
-    */
-
-    return {
-        getOrCreateUserDB: function(dbName){
-            return new UserDB(dbName);
-        },
-        getNewRandomDBName: function(){
-            var maxTimes = 1000;
-            while(true){
-                var rndNo = Math.floor(Math.random()*1000*1000*1000*1000*1000);
-                var rndStr = rndNo.toString(36);
-                var encodedRndStr = base32.encode(rndNo);
-                var exists = fs.existsSync(path.join(options.rootDataDir, rndStr));
-                if (!exists) return rndStr;
-                maxTimes--;
-                if (maxTimes<0) throw 'error unable to get new db name'
-            }
+    Provider.prototype.getNewRandomDBName = function(){
+        var maxTimes = 1000;
+        while(true){
+            var rndNo = Math.floor(Math.random()*1000*1000*1000*1000*1000);
+            var rndStr = rndNo.toString(36);
+            var encodedRndStr = base32.encode(rndNo);
+            var exists = fs.existsSync(path.join(options.rootDataDir, rndStr));
+            if (!exists) return rndStr;
+            maxTimes--;
+            if (maxTimes<0) throw 'error unable to get new db name'
         }
-    };
+    }
+
+    return new Provider();
 
 }
 

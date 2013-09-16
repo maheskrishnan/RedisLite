@@ -6,6 +6,7 @@
   "homepage": "",
   "dependencies": {
     "base32": "0.0.5",
-    "express": "~3.4.0"
+    "express": "~3.4.0",
+    "sqlite3": "~2.1.17"
   }
 }
