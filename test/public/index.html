@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script  src="/api/redis/util.js" type="text/javascript"></script>
     <meta charset=utf-8 />
     <title>JS Bin</title>
@@ -10,48 +10,120 @@
 <body>
 
 
-<a href="#" id="register">Register</a>|
-<a href="#" id="login">login</a>|
-<a href="#" id="userinfo">User Info</a>|
-<a href="#" id="logout">logout</a>
+
+<div ng-controller="admin">
 
 
-<hr/>
-Key:<input type="text" id="key"/> Value:<input type="text" id="value"/>
-<button id="update">Update</button><button id="read">Read</button>
-<hr/>
-<button id="refresh">Refresh</button>
+    <div ng-hide="userInfo.loggedIn">
+        <a href="#" id="register" ng-click="register()" ng-hide="userInfo.loggedIn">Register</a>|
+        <a href="#" id="login"  ng-click="login()" ng-hide="userInfo.loggedIn">login</a>
+    </div>
 
-<p></p>
+    <div ng-show="userInfo.loggedIn">
+        <a href="#" id="userinfo" ng-show="userInfo.loggedIn">User Info</a>
+        |
+        <select ng-model="cdb" ng-change="dbchange()">
+            <option ng-repeat="db in userInfo.dblist">{{db}}</option>
+        </select>
+        |
+        <a href="#" id="logout"  ng-click="logout()" ng-show="userInfo.loggedIn">logout</a>
+        <hr/>
+        <div ng-show="db">
+            New Key:<input type="text" ng-model="newkey"/>
+            Value:<input type="text" ng-model="newvalue"/>
+            <button id="update" ng-click="add(newkey, newvalue)">Set</button>
+            <button id="exists-update" ng-click="exists(newkey)">Exists?</button>
+            <hr/>
+
+            <button id="refresh" ng-click="refresh()">Refresh</button>
+            <ul>
+                <li ng-repeat="entry in entries">
+                    <input disabled ng-model="entry.key"/>:<input ng-model="entry.value"/>
+                    <button ng-click="update(entry)">Update</button>
+                    <button ng-click="delete(entry, $index)">X</button>
+                </li>
+            </ul>
+            <hr/>
+        </div>
+    </div>
+
+</div>
+
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('#register').on('click', function(){
+    function admin($scope){
+
+        $scope.GetUserInfo = function(){
+            RedisLiteJs.userInfo(function(err, userInfo){
+                console.log(typeof(userInfo));
+                $scope.userInfo = userInfo;
+                $scope.$digest();
+            });
+        };
+
+        $scope.GetUserInfo();
+
+        $scope.dbchange = function(){
+            $scope.db = new RedisLiteJsDb($scope.cdb);
+            $scope.refresh();
+        };
+
+        $scope.register = function(){
             RedisLiteJs.register('mkrishnan','welcome');
-        });
-        $('#login').on('click', function(){
-            RedisLiteJs.login('mkrishnan','welcome');
-        });
-        $('#userinfo').on('click', function(){
-            RedisLiteJs.userInfo();
-        });
-        $('#logout').on('click', function(){
-            RedisLiteJs.logout();
-        });
-        $('#update').on('click', function(){
-            new RedisLiteJsDb('test').set($('#key').val(),$('#value').val());
-        });
-        $('#read').on('click', function(){
-            new RedisLiteJsDb('test').get($('#key').val(), function(data){
-                $('#value').val(data);
+        };
+        $scope.login = function(){
+            RedisLiteJs.login('mkrishnan','welcome', function(){
+                var tdb = new RedisLiteJsDb('test');
+                tdb.set('asdasd','asdasd');
+                $scope.GetUserInfo();
             });
-        });
-        $('#refresh').on('click', function(){
-            new RedisLiteJsDb('test').keys('*', function(data){
-                console.log(data);
+        };
+        $scope.logout = function(){
+            RedisLiteJs.logout(function(err){
+                $scope.GetUserInfo();
             });
-        });
-    });
+        };
+
+        $scope.delete = function(entry, idx){
+            console.log('deleting:'+entry.key);
+            $scope.db.delete(entry.key, function(err){
+                if (!err){
+                    $scope.entries.splice(idx, 1);
+                    $scope.$digest();
+                }
+            });
+        };
+
+        $scope.add = function(key, value){
+            $scope.db.set(key, value, function(){
+                $scope.refresh();
+            });
+        };
+
+        $scope.exists = function(key){
+            $scope.db.exists(key, function(){
+                $scope.refresh();
+            });
+        };
+
+        $scope.update = function(entry){
+            console.log(entry.originalKey+':::'+entry.key);
+            $scope.db.set(entry.key, entry.value, function(err, value){
+                entry.value = value;
+            });
+        };
+
+        $scope.refresh = function(){
+            $scope.db.allGet(function(err, data){
+                $scope.entries = data;
+                $scope.entries.forEach(function(entry){
+                    entry.originalKey = entry.key;
+                });
+                $scope.$digest();
+            });
+        };
+
+    }
 </script>
 
 </body>

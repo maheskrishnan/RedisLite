@@ -3,8 +3,6 @@ var path    =   require('path');
 
 var express =   require('express');
 
-var DATA_DIRECTORY = "data"
-
 var app = express();
 var port = process.env.PORT || 6060;
 
@@ -23,10 +21,13 @@ app.configure(function() {
     });
     app.use(express.static('public'));
 
-    var redisLiteFS  =   require('./../redislite-fs.js')({rootDataDir:'db-fs'});
     var redisLiteMiddleware  =   require('./../redislite-middleware.js');
-    app.use('/api', redisLiteMiddleware({provider: redisLiteFS}).middleware);
 
+    app.use('/api', redisLiteMiddleware({dataDir:'db-fs'}).middleware);
+
+    //var rpcMiddleWare = require('myRPCMiddleware').from({add:function(a,b){return a+b;}});
+    //app.use('/rpc', rpcMiddleWare.middleware);
+    //   /rpc/action?method=add&a=1&b=2
 
 });
 

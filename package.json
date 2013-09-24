@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "author": "Maheswaran Krishnan",
   "homepage": "",
+  "main":"./redislite-middleware.js",
   "dependencies": {
     "base32": "0.0.5",
     "express": "~3.4.0",
