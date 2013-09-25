@@ -3,7 +3,7 @@
 <head>
     <script src="/js/angular.min.js"></script>
     <script src="/js/jquery.min.js"></script>
-    <script  src="/api/redis/util.js" type="text/javascript"></script>
+    <script  src="/api/helper.js" type="text/javascript"></script>
     <meta charset=utf-8 />
     <title>JS Bin</title>
 </head>
@@ -15,20 +15,21 @@
 
 
     <div ng-hide="userInfo.loggedIn">
+        <span>{{userInfo}}</span>|
         <a href="#" id="register" ng-click="register()" ng-hide="userInfo.loggedIn">Register</a>|
         <a href="#" id="login"  ng-click="login()" ng-hide="userInfo.loggedIn">login</a>
     </div>
 
     <div ng-show="userInfo.loggedIn">
-        <a href="#" id="userinfo" ng-show="userInfo.loggedIn">User Info</a>
+        <span ng-show="userInfo.loggedIn">{{userInfo}}</span>
         |
-        <select ng-model="cdb" ng-change="dbchange()">
+        <select ng-model="selectedBucket" ng-change="dbchange()">
             <option ng-repeat="db in userInfo.dblist">{{db}}</option>
         </select>
         |
         <a href="#" id="logout"  ng-click="logout()" ng-show="userInfo.loggedIn">logout</a>
         <hr/>
-        <div ng-show="db">
+        <div ng-show="selectedBucket">
             New Key:<input type="text" ng-model="newkey"/>
             Value:<input type="text" ng-model="newvalue"/>
             <button id="update" ng-click="add(newkey, newvalue)">Set</button>
@@ -53,8 +54,10 @@
 <script type="text/javascript">
     function admin($scope){
 
+        $scope.kvStore = new RemoteKeyValueStore("/api");
+
         $scope.GetUserInfo = function(){
-            RedisLiteJs.userInfo(function(err, userInfo){
+            $scope.kvStore.userInfo(function(err, userInfo){
                 console.log(typeof(userInfo));
                 $scope.userInfo = userInfo;
                 $scope.$digest();
@@ -64,29 +67,27 @@
         $scope.GetUserInfo();
 
         $scope.dbchange = function(){
-            $scope.db = new RedisLiteJsDb($scope.cdb);
             $scope.refresh();
         };
 
         $scope.register = function(){
-            RedisLiteJs.register('mkrishnan','welcome');
+            $scope.kvStore.register('mkrishnan','welcome');
         };
         $scope.login = function(){
-            RedisLiteJs.login('mkrishnan','welcome', function(){
-                var tdb = new RedisLiteJsDb('test');
-                tdb.set('asdasd','asdasd');
+            $scope.kvStore.login('mkrishnan','welcome', function(){
+                $scope.kvStore.set('test', 'x','y');
                 $scope.GetUserInfo();
             });
         };
         $scope.logout = function(){
-            RedisLiteJs.logout(function(err){
+            $scope.kvStore.logout(function(err){
                 $scope.GetUserInfo();
             });
         };
 
         $scope.delete = function(entry, idx){
             console.log('deleting:'+entry.key);
-            $scope.db.delete(entry.key, function(err){
+            $scope.kvStore.delete($scope.selectedBucket, entry.key, function(err){
                 if (!err){
                     $scope.entries.splice(idx, 1);
                     $scope.$digest();
@@ -95,29 +96,30 @@
         };
 
         $scope.add = function(key, value){
-            $scope.db.set(key, value, function(){
+            $scope.kvStore.set($scope.selectedBucket, key, value, function(){
                 $scope.refresh();
             });
         };
 
         $scope.exists = function(key){
-            $scope.db.exists(key, function(){
+            $scope.kvStore.exists($scope.selectedBucket, key, function(){
                 $scope.refresh();
             });
         };
 
         $scope.update = function(entry){
             console.log(entry.originalKey+':::'+entry.key);
-            $scope.db.set(entry.key, entry.value, function(err, value){
+            $scope.kvStore.set($scope.selectedBucket, entry.key, entry.value, function(err, value){
                 entry.value = value;
             });
         };
 
         $scope.refresh = function(){
-            $scope.db.allGet(function(err, data){
+            $scope.kvStore.allGet($scope.selectedBucket, function(err, data){
                 $scope.entries = data;
                 $scope.entries.forEach(function(entry){
                     entry.originalKey = entry.key;
+                    entry.value = JSON.stringify(entry.value);
                 });
                 $scope.$digest();
             });

@@ -22,20 +22,19 @@ module.exports = function(options){
         return md5.digest('hex');
     }
 
-    var reservedDBNames = ['settings', 'users'];
-
     var usersDb = provider.getOrCreateUserDB('users');
 
     router.get('/test', function(req, res){ res.send(200, "test successful..."); });
 
     //TODO: caching & async for '/redis/util.js'
-    router.get('/redis/util.js', function(req, res){
+
+    router.get('/helper.js', function(req, res){
         var jsPath = require('path').resolve(__dirname, 'redislitejs.js');
         var jsContent = require('fs').readFileSync(jsPath);
         res.end(jsContent);
     });
 
-    router.post('/redis/register', function(req, res){
+    router.post('/register', function(req, res){
         var uname = req.body.uname;
         var pwd = req.body.pwd;
 
@@ -47,7 +46,7 @@ module.exports = function(options){
         }
     });
 
-    router.post('/redis/user', function(req, res){
+    router.post('/user', function(req, res){
         var user = {loggedIn: false};
         if (req.session.authenticatedUserInfo){
             var userInfo = usersDb.get(req.session.authenticatedUserInfo.uname);
@@ -56,10 +55,11 @@ module.exports = function(options){
             user.loggedIn = true;
             user.dblist = arrDBs;
         }
+        res.set('Content-Type', 'application/json');
         res.send(200, JSON.stringify(user));
     });
 
-    router.post('/redis/login', function(req, res){
+    router.post('/login', function(req, res){
         var uname = req.body.uname;
         var pwd = req.body.pwd;
         if (usersDb.exists(getHash(uname))) {
@@ -73,7 +73,7 @@ module.exports = function(options){
         }else res.send(401);
     });
 
-    router.post('/redis/logout', function(req, res){
+    router.post('/logout', function(req, res){
         if (req.session.authenticatedUserInfo){
             req.session.authenticatedUserInfo = null;
             res.send(200);
@@ -85,7 +85,7 @@ module.exports = function(options){
         res.send(200, JSON.stringify(json));
     }
 
-    router.post('/redis/action', function(req, res){
+    router.post('/action', function(req, res){
 
         if (!req.session.authenticatedUserInfo) { res.send(401); return; }
 
