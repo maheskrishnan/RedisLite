@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/public/index.html" afterPath="$PROJECT_DIR$/test/public/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/redislite-middleware.js" afterPath="$PROJECT_DIR$/redislite-middleware.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/redislitejs.js" afterPath="$PROJECT_DIR$/redislitejs.js" />
+    <list default="true" id="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" name="Default" comment="refactorings. removed redis prefix, configurable api root">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/app.js" afterPath="$PROJECT_DIR$/test/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/run.cmd" afterPath="$PROJECT_DIR$/test/run.cmd" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="redislite.iws" />
@@ -18,7 +17,7 @@
     <file path="/package.json" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1378928852064" ignored="false" />
     <file path="/index.html" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1379218987395" ignored="false" />
     <file path="/.gitignore" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1379984268166" ignored="false" />
-    <file path="/Dummy.txt" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1380078513723" ignored="false" />
+    <file path="/Dummy.txt" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1380160645543" ignored="false" />
     <file path="/data-types.txt" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1379264654330" ignored="false" />
     <file path="/redislite-sqlite.js" changelist="29b7f5d0-4a23-4b7b-8557-49f4d32ee0c7" time="1379301148860" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -65,7 +64,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -102,6 +100,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -116,7 +115,25 @@
           <file leaf-file-name="run.cmd" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/run.cmd">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="4" column="0" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+                <state line="4" column="0" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="redislitejs.js" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/redislitejs.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="23" column="2" selection-start="484" selection-end="484" vertical-scroll-proportion="0.016722407">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test/app.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="2" column="69" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -126,24 +143,6 @@
             <entry file="file://$PROJECT_DIR$/test/public/index.html">
               <provider selected="true" editor-type-id="text-editor">
                 <state line="41" column="21" selection-start="1445" selection-end="1445" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/app.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="5" column="69" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="redislitejs.js" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/redislitejs.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="23" column="2" selection-start="484" selection-end="484" vertical-scroll-proportion="0.38375974">
                   <folding />
                 </state>
               </provider>
@@ -159,16 +158,7 @@
                 <state />
               </provider>
               <provider selected="true" editor-type-id="text-editor">
-                <state line="19" column="31" selection-start="189" selection-end="189" vertical-scroll-proportion="0.3220339">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="redislite-middleware.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/redislite-middleware.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="74" column="56" selection-start="2300" selection-end="2300" vertical-scroll-proportion="0.0">
+                <state line="19" column="54" selection-start="189" selection-end="189" vertical-scroll-proportion="0.3227633">
                   <folding />
                 </state>
               </provider>
@@ -178,6 +168,15 @@
             <entry file="file://$PROJECT_DIR$/redislite-fs.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state line="77" column="28" selection-start="2456" selection-end="2474" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="redislite-middleware.js" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/redislite-middleware.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="74" column="56" selection-start="2300" selection-end="2300" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -277,8 +276,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -296,8 +295,8 @@
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -333,22 +332,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="$PROJECT_DIR$">
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -375,6 +358,22 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="$PROJECT_DIR$">
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -462,12 +461,16 @@
       <created>1379984385503</created>
       <updated>1379984385503</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="refactorings. removed redis prefix, configurable api root">
+      <created>1380078954905</created>
+      <updated>1380078954905</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="45" y="22" width="1875" height="1058" extended-state="6" />
-    <editor active="false" />
+    <frame x="45" y="22" width="1875" height="1058" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26012793" sideWeight="0.95626026" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -487,7 +490,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.109896116" sideWeight="0.6705757" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.109896116" sideWeight="0.6705757" order="0" side_tool="false" content_ui="combo" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942432" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -541,7 +544,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="lots of bug fixing, finished features and refactorings" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactorings. removed redis prefix, configurable api root" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -558,6 +561,7 @@
     <MESSAGE value="initial commit with someple key-value get/set and on filesystem" />
     <MESSAGE value="1) created test folder and moved testing stuffs. 2) serving util js from module itself rather than testing" />
     <MESSAGE value="lots of bug fixing, finished features and refactorings" />
+    <MESSAGE value="refactorings. removed redis prefix, configurable api root" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -628,21 +632,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="69" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0">
+        <state line="2" column="69" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/run.cmd">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="108" selection-end="108" vertical-scroll-proportion="0.0">
+        <state line="4" column="0" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/redislitejs.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="2" selection-start="484" selection-end="484" vertical-scroll-proportion="0.38375974">
+        <state line="23" column="2" selection-start="484" selection-end="484" vertical-scroll-proportion="0.016722407">
           <folding />
         </state>
       </provider>
@@ -659,7 +663,7 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="31" selection-start="189" selection-end="189" vertical-scroll-proportion="0.3220339">
+        <state line="19" column="54" selection-start="189" selection-end="189" vertical-scroll-proportion="0.3227633">
           <folding />
         </state>
       </provider>

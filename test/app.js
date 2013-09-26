@@ -22,13 +22,10 @@ app.configure(function() {
     app.use(express.static('public'));
 
     var redisLiteMiddleware  =   require('./../redislite-middleware.js');
-
     app.use('/api', redisLiteMiddleware({dataDir:'db-fs'}).middleware);
 
-    //var rpcMiddleWare = require('myRPCMiddleware').from({add:function(a,b){return a+b;}});
-    //app.use('/rpc', rpcMiddleWare.middleware);
-    //   /rpc/action?method=add&a=1&b=2
 
 });
+
 
 var server = app.listen(port);
