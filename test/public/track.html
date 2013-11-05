@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script  src="/api/helper.js" type="text/javascript"></script>
+    <meta charset=utf-8 />
+    <title>JS Bin</title>
+    <style type="text/css">
+        input.small {
+            width: 60px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div ng-controller="track">
+
+
+    <div ng-hide="userInfo.loggedIn">
+        <span>{{userInfo}}</span>|
+        <a href="#" id="register" ng-click="register()" ng-hide="userInfo.loggedIn">Register</a>|
+        <a href="#" id="login"  ng-click="login()" ng-hide="userInfo.loggedIn">login</a>
+    </div>
+
+    <div ng-show="userInfo.loggedIn">
+        <span ng-show="userInfo.loggedIn">{{userInfo}}</span>
+        |
+        <a href="#" id="logout"  ng-click="logout()" ng-show="userInfo.loggedIn">logout</a>
+        <hr/>
+        <div>
+            <table width="100%" border="1">
+                <tr>
+                    <td width="400px" align="center">
+                        <p>
+                            <select ng-model="selectedYear" ng-change="displayWeeks=getCal()">
+                                <option ng-repeat="year in years">{{year}}</option>
+                            </select>
+                            <select ng-model="selectedMonth" ng-change="displayWeeks=getCal()">
+                                <option ng-repeat="month in months">{{month}}</option>
+                            </select>
+                        </p>
+
+                        <table>
+                            <tr ng-repeat="wk in displayWeeks">
+                                <td ng-repeat="day in wk">
+                                    <div ng-show="day.valid">
+                                        <a href="#" ng-click="populate(day.date)">{{day.date}}</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td>
+                        <p>{{selectedYear}}-{{selectedMonth}}</p>
+                        <p>{{selectedDay}}</p>
+                        <ul style="list-style: none;">
+                            <li><label>XYzx</label><input type="text" class="small" ng-model="daydata.wgt"/></li>
+                            <li>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w1"/>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w2"/>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w3"/>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w4"/>
+                            </li>
+                            <li>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w1"/>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w2"/>
+                            </li>
+                            <li>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w1"/>
+                                <label>XYzx</label><input type="text" class="small" ng-model="daydata.w2"/>
+                            </li>
+                            <li>
+                                <p><button ng-click="save()">Save</button></p>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+
+    function track($scope){
+
+        $scope.years=['2014','2013','2012','2011','2010'];
+        $scope.months=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $scope.selectedYear = '2013';
+        $scope.selectedMonth = 'Sep';
+
+        $scope.getCal = function (){
+
+            function getSelectedMonthIndex(strMonth){
+                for(idx in $scope.months) {
+                    if ($scope.months[idx]==strMonth) return idx;
+                }
+                return -1;
+            }
+
+            var selectedMonthIdx = getSelectedMonthIndex($scope.selectedMonth);
+            var firstDayOfMonth= new Date($scope.selectedYear, selectedMonthIdx, 1);
+            var daysFromPrevMonth = (7+firstDayOfMonth.getDay())%7;
+            var days = [];
+            while(daysFromPrevMonth>0){
+                days.push({valid:false});
+                daysFromPrevMonth--;
+            }
+            var currMonth = firstDayOfMonth.getMonth();
+            var dateCounter=1;
+            while(true){
+                var newDate = new Date($scope.selectedYear, selectedMonthIdx, dateCounter);
+                var newMonth = newDate.getMonth();
+                dateCounter++;
+                if (currMonth!=newMonth) break;
+                days.push({valid:true, date:newDate.getDate(), dt:newDate});
+            }
+            while(days.length<42){
+                days.push({valid:false});
+            }
+
+            console.log(days);
+
+            console.log('days.length::'+days.length);
+            var retArr = [];
+            retArr.push(days.splice(0,7));
+            retArr.push(days.splice(0,7));
+            retArr.push(days.splice(0,7));
+            retArr.push(days.splice(0,7));
+            retArr.push(days.splice(0,7));
+            retArr.push(days.splice(0,7));
+            return retArr;
+        }
+
+        $scope.displayWeeks = $scope.getCal();
+
+        $scope.kvStore = new RemoteKeyValueStore("/api");
+
+        $scope.GetUserInfo = function(){
+            $scope.kvStore.userInfo(function(err, userInfo){
+                console.log(typeof(userInfo));
+                $scope.userInfo = userInfo;
+                $scope.$digest();
+            });
+        };
+
+        $scope.GetUserInfo();
+
+        $scope.register = function(){
+            $scope.kvStore.register('mkrishnan','welcome');
+        };
+        $scope.login = function(){
+            $scope.kvStore.login('mkrishnan','welcome', function(){
+                $scope.kvStore.set('test', 'x','y');
+                $scope.GetUserInfo();
+            });
+        };
+        $scope.logout = function(){
+            $scope.kvStore.logout(function(err){
+                $scope.GetUserInfo();
+            });
+        };
+
+        $scope.populate = function(dateInMonth1Index){
+            dateInMonth1Index = ''+dateInMonth1Index;
+            if (dateInMonth1Index.length==1) dateInMonth1Index='0'+dateInMonth1Index;
+            $scope.selectedDay = $scope.selectedYear+'-'+$scope.selectedMonth+'-'+dateInMonth1Index;
+            $scope.kvStore.get('health', $scope.selectedDay, function(error, data){
+                $scope.daydata = data;
+                $scope.$digest();
+            });
+        };
+
+
+        $scope.save = function(){
+            $scope.kvStore.set('health', $scope.selectedDay, $scope.daydata, function(error, data){
+                $scope.daydata = data;
+                $scope.$digest();
+            });
+        };
+
+    }
+</script>
+
+</body>
+</html>
